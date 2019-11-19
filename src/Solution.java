@@ -694,6 +694,43 @@ public class Solution {
         return list;
     }
 
+    // pow
+    // 暴力法超时了。。。
+    // url:https://leetcode-cn.com/problems/powx-n/
+    public double myPow(double x, int n) {
+//        Math.pow(x, n);
+        if (n == 0) {
+            return 1;
+        }
+
+        double result = x;
+        for (int i = 1; i < Math.abs(n); i++) {
+            result *= x;
+        }
+
+        if (n < 0) {
+            result = 1 / result;
+        }
+
+        return result;
+    }
+
+    // 加一
+    //https://leetcode-cn.com/problems/plus-one/
+    public int[] plusOne(int[] digits) {
+        for (int i = digits.length - 1; i >= 0; i--) {
+            digits[i]++;
+            digits[i] = digits[i] % 10;
+            if (digits[i] != 0) return digits;
+        }
+
+        // 出现9999999之类数字时候
+        digits = new int[digits.length + 1];
+        digits[0] = 1;
+
+        return digits;
+    }
+
 }
 
 
