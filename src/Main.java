@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * @program: LeetCode
  * @description:
@@ -6,8 +9,7 @@
  **/
 public class Main {
     public static void main(String[] args) {
-//        Solution solution = new Solution();
-//        solution.longestPalindrome("abcd");
-        System.out.println((char) 57);
+        Solution solution = new Solution();
+        solution.fizzBuzz(15);
     }
 }

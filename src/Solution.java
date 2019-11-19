@@ -1,5 +1,7 @@
+import apple.laf.JRSUIUtils;
 import javafx.util.Pair;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -47,14 +49,7 @@ public class Solution {
      * 二叉树的最大深度
      * url: https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/
      */
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode(int x) {
-            val = x;
-        }
-    }
+
 
     // 深度优先
     public int maxDepth(TreeNode root) {
@@ -116,6 +111,7 @@ public class Solution {
         return maxProfit;
     }
 
+
     // 找到最小峰后的最大峰️
     public int maxProfit2(int[] prices) {
         int minPrice = Integer.MAX_VALUE;
@@ -131,6 +127,62 @@ public class Solution {
         return maxProfit;
     }
 
+
+    /**
+     * 买股票的最佳时机2
+     * url: https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/solution/
+     */
+    public int maxProfit3(int[] prices) {
+        if (prices.length == 0 || prices == null) {
+            return 0;
+        }
+
+        int peak = 0;
+        int valley = prices[0];
+        int profit = 0;
+
+        for (int i = 1; i < prices.length;) {
+            int subProfit = 0;
+            while (i < prices.length && i > 0 && prices[i] >= prices[i-1]) {
+                peak = prices[i];
+                subProfit = peak - valley;
+                i++;
+            }
+
+            while (i < prices.length && i > 0 && prices[i] < prices[i-1]) {
+                valley = prices[i];
+                i++;
+            }
+
+            profit += subProfit;
+        }
+
+        // 改进
+//        if (prices.length == 0 || prices == null) {
+//            return 0;
+//        }
+//
+//        int peak = prices[0];
+//        int valley = prices[0];
+//        int profit = 0;
+//
+//        for (int i = 1; i < prices.length;) {
+//            while (i < prices.length && i > 0 && prices[i] < prices[i-1]) {
+//                i++;
+//            }
+//            valley = prices[i-1];
+//
+//            while (i < prices.length && i > 0 && prices[i] >= prices[i-1]) {
+//                i++;
+//            }
+//            peak = prices[i-1];
+//            profit += peak - valley;
+//        }
+//
+//        return profit;
+
+        return profit;
+    }
 
     /**
      * 回文数
@@ -314,4 +366,379 @@ public class Solution {
         return max;
     }
 
+    /**
+     * 三数之和
+     * url : https://leetcode-cn.com/problems/3sum/
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> list = new ArrayList<>();
+
+        if (nums.length < 3 || nums == null) {
+            return list;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                break;
+            }
+
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            int L = i + 1;
+            int R = nums.length - 1;
+
+            while (L < R) {
+                int sum = nums[L] + nums[R] + nums[i];
+
+                if (sum == 0) {
+                    list.add(Arrays.asList(nums[i], nums[L], nums[R]));
+                    while (L < R && nums[R] == nums[R - 1]) {
+                        R--;
+                    }
+
+                    while (L < R && nums[L] == nums[L + 1]) {
+                        L++;
+                    }
+
+                    L++;
+                    R--;
+                } else if (sum < 0) {
+                    L++;
+                } else if (sum > 0) {
+                    R--;
+                }
+            }
+        }
+
+        return list;
+    }
+
+
+    /**
+     * 最长公共前缀
+     * url:https://leetcode-cn.com/problems/longest-common-prefix/
+     */
+    public String longestCommonPrefix(String[] strs) {
+        String prefix = "";
+        char[][] subPrefix = new char[strs.length][100];
+
+        int strlen = 100;
+
+        for (int i = 0; i < strlen; i++) {
+            for (int j = 0; j < strs.length; j++) {
+                if (i >= strs[j].length()) {
+                    continue;
+                }
+                subPrefix[j][i] = strs[j].charAt(i);
+            }
+        }
+
+        return prefix;
+    }
+
+    // 二叉树遍历
+    // 前中后序遍历
+    // 递归迭代深度优先遍历，共六种
+    // 层次遍历
+
+    // 递归前序遍历
+    public void preOrderRecur(TreeNode node, List list) {
+        if (node == null) {
+            return;
+        }
+        list.add(node.val);
+        preOrderRecur(node.left, list);
+        preOrderRecur(node.right, list);
+    }
+
+    // 递归中序遍历
+    public void middleOrderRecur(TreeNode node, List list) {
+        if (node == null) {
+            return;
+        }
+
+        middleOrderRecur(node.left, list);
+        list.add(node.val);
+        middleOrderRecur(node.right, list);
+
+    }
+
+    // 递归后续遍历
+    public void postOrderRecur(TreeNode node, List list) {
+        if (node == null) {
+            return;
+        }
+
+        postOrderRecur(node.left, list);
+        postOrderRecur(node.right, list);
+        list.add(node.val);
+    }
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        preOrderRecur(root, list);
+
+        return list;
+    }
+
+
+    public List<Integer> middleOrderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        middleOrderRecur(root, list);
+
+        return list;
+    }
+
+    public List<Integer> postOrderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        postOrderRecur(root, list);
+
+        return list;
+    }
+
+    // 迭代前序遍历
+    // 用栈实现，细节：先放右节点再放左节点
+    public List<Integer> preOrderIter(TreeNode root) {
+
+        Stack<TreeNode> stack = new Stack<>();
+        LinkedList<Integer> output = new LinkedList<>();
+
+        if (root == null) {
+            return output;
+        }
+
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            output.add(node.val);
+
+            if (node.right != null) {
+                stack.add(node.right);
+            }
+
+            if (node.left != null) {
+                stack.add(node.left);
+            }
+
+        }
+
+        return output;
+    }
+
+
+    // 迭代中序遍历
+    // 用栈实现
+
+    public List<Integer> middleOrderIter(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        List<Integer> output = new ArrayList<>();
+        if (root == null) {
+            return output;
+        }
+
+        TreeNode curr = root;
+        while (curr != null || !stack.isEmpty()) {
+            while (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
+            }
+
+            curr = stack.pop();
+            output.add(curr.val);
+            curr = curr.right;
+        }
+
+        return output;
+    }
+
+    // 迭代后序遍历
+    // 栈实现，和前序遍历相反，但是多个addFirst()
+
+    public List<Integer> postOrderIter(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        LinkedList<Integer> output = new LinkedList<>();
+
+        if (root == null) {
+            return output;
+        }
+
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            output.addFirst(node.val);
+
+            if (node.left != null) {
+                stack.add(node.left);
+            }
+
+            if (node.right != null) {
+                stack.add(node.right);
+            }
+
+        }
+
+        return output;
+    }
+
+    // 二叉树的层次遍历
+    // 队列实现
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        LinkedList<List<Integer>> output = new LinkedList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
+
+        if (root == null) {
+            return output;
+        }
+
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            List<Integer> level = new ArrayList<>();
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode curr = queue.poll();
+                level.add(curr.val);
+                if (curr.left != null) {
+                    queue.offer(curr.left);
+                }
+
+                if (curr.right != null) {
+                    queue.offer(curr.right);
+                }
+            }
+            output.add(level);
+        }
+        return output;
+    }
+
+    // 不同路径
+//    https://leetcode-cn.com/problems/unique-paths/
+
+    public int uniquePaths(int m, int n) {
+        if (m == 1 || n == 1) {
+            return 1;
+        }
+
+        int top = n - 1 ;
+        int button = m + n - 1 - 1;
+
+        return combination(top, button);
+    }
+
+    // 动态规划
+//    我们令 dp[i][j] 是到达 i, j 最多路径
+//    动态方程：dp[i][j] = dp[i-1][j] + dp[i][j-1]
+    public int uniquePathsDP(int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < n; i++) dp[0][i] = 1;
+        for (int i = 0; i < m; i++) dp[i][0] = 1;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    public int combination(int top, int button) {
+        BigDecimal result = BigDecimal.ONE;
+        BigDecimal result2 = BigDecimal.ONE;
+        long b = button;
+        for (int i = 0; i < top; i++) {
+            result = result.multiply(BigDecimal.valueOf(b--));
+            System.out.println("result = " + result);;
+        }
+
+        for (int i = 1; i <= top; i++) {
+            result2 = result2.multiply(BigDecimal.valueOf(i));
+            System.out.println("result2 = " + result2);
+        }
+
+        return Integer.parseInt(result.divide(result2).toString());
+    }
+
+    // url:https://leetcode-cn.com/problems/fizz-buzz/
+    public List<String> fizzBuzz(int n) {
+        List<String> list = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            if (i % 3 == 0 && i % 5 == 0) {
+                list.add("FizzBuzz");
+                continue;
+            }
+
+            if (i % 3 == 0) {
+                list.add("Fizz");
+                continue;
+            }
+
+            if (i % 5 == 0) {
+                list.add("Buzz");
+                continue;
+            }
+
+            list.add(i + "");
+        }
+
+        for (String s : list) {
+            System.out.println(s);
+
+        }
+
+        return list;
+    }
+}
+
+
+/**
+ * LRU页面置换算法
+ * url: https://leetcode-cn.com/problems/lru-cache/
+ */
+class LRUCache {
+    private int capacity;
+    Map<Integer, Integer> map = new HashMap<>();
+    LinkedList<Integer> flashList = new LinkedList<>();
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int get(int key) {
+        if (flashList.contains(key)) {
+            flashList.remove(key);
+        } else {
+            flashList.add(key);
+        }
+
+        int result;
+        try {
+            result = map.get(key);
+        } catch (NullPointerException e) {
+            result = -1;
+        }
+        return result;
+    }
+
+    public void put(int key, int value) {
+        if (map.size() + 1 > capacity) {
+            map.remove(flashList.get(0));
+            flashList.remove(flashList.get(0));
+        } else {
+            flashList.add(key);
+            map.put(key, value);
+        }
+    }
+
+
+
+}
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) {
+        val = x;
+    }
 }
