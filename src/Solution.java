@@ -422,17 +422,22 @@ public class Solution {
      * url:https://leetcode-cn.com/problems/longest-common-prefix/
      */
     public String longestCommonPrefix(String[] strs) {
-        String prefix = "";
-        char[][] subPrefix = new char[strs.length][100];
+        if (strs.length == 0) {
+            return "";
+        }
 
-        int strlen = 100;
-
-        for (int i = 0; i < strlen; i++) {
-            for (int j = 0; j < strs.length; j++) {
-                if (i >= strs[j].length()) {
-                    continue;
+        String prefix = strs[0];
+        for (int i = 1; i < strs.length; i++) {
+            int j;
+            for (j = 0; j < strs[i].length() && j < prefix.length(); j++) {
+                if (prefix.charAt(j) != strs[i].charAt(j)) {
+                    break;
                 }
-                subPrefix[j][i] = strs[j].charAt(i);
+            }
+            prefix = prefix.substring(0, j);
+
+            if (prefix.equals("")) {
+                return "";
             }
         }
 
@@ -688,6 +693,7 @@ public class Solution {
 
         return list;
     }
+
 }
 
 
