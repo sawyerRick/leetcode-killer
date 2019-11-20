@@ -276,11 +276,35 @@ public class Solution {
      * 最长回文子串
      * url: https://leetcode-cn.com/problems/longest-palindromic-substring/
      */
-    public String longestPalindrome(String s) {
-        String reverseS = new StringBuilder(s).reverse().toString();
-        System.out.println(reverseS);
 
-        return null;
+    // 中心扩展法
+    public String longestPalindrome(String s) {
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+
+        return s.substring(start, end + 1);
+    }
+
+    // 返回中心扩展的总共n个匹配串
+    public int expandAroundCenter(String s, int left, int right) {
+        int l = left;
+        int r = right;
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
+        }
+
+        return r - l - 1;
     }
 
 
@@ -728,9 +752,47 @@ public class Solution {
         digits = new int[digits.length + 1];
         digits[0] = 1;
 
+
         return digits;
     }
 
+    //Z字形变换
+    //url:https://leetcode-cn.com/problems/zigzag-conversion/solution/
+    // 思路，从左右到右遍历字符串，把字符放到合适的位置
+    public String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+
+        List<StringBuilder> rows = new ArrayList<>();
+        // 确定非空行
+        int notNullRows = Math.min(numRows, s.length());
+        for (int i = 0; i < notNullRows; i++) {
+            rows.add(new StringBuilder());
+        }
+
+        int currRow = 0;
+        boolean goingDown = true;
+
+        for (char c : s.toCharArray()) {
+            System.out.println("currRow = " + currRow);
+            rows.get(currRow).append(c);
+
+            currRow += goingDown? 1 : -1;
+            // 到顶部或者底部要掉头
+            if (currRow == 0 || currRow == notNullRows - 1) {
+                goingDown = !goingDown;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (StringBuilder row : rows) {
+            sb.append(row);
+        }
+
+        return sb.toString();
+
+    }
 }
 
 
@@ -772,6 +834,7 @@ class LRUCache {
             map.put(key, value);
         }
     }
+
 
 
 

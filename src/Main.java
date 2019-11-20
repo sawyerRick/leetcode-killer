@@ -10,6 +10,6 @@ import java.util.Queue;
 public class Main {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.myPow(0.00001, 2147483647));
+        System.out.println(solution.convert("ab", 1));
     }
 }
