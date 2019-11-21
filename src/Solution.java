@@ -779,7 +779,7 @@ public class Solution {
             rows.get(currRow).append(c);
 
             currRow += goingDown? 1 : -1;
-            // 到顶部或者底部要掉头
+            // 到顶部或者底部要调头
             if (currRow == 0 || currRow == notNullRows - 1) {
                 goingDown = !goingDown;
             }
@@ -791,7 +791,29 @@ public class Solution {
         }
 
         return sb.toString();
+    }
 
+    // 正则匹配
+    // url: https://leetcode-cn.com/problems/regular-expression-matching/
+    public boolean isMatch(String s, String p) {
+        char point = '.';
+        char all = '*';
+        char pre = s.charAt(0);
+
+        int cur = 0;
+
+
+        for (char c : s.toCharArray()) {
+            if (c == point) {
+
+            } else if (c == all) {
+
+            } else {
+
+            }
+        }
+
+        return true;
     }
 }
 
@@ -825,7 +847,7 @@ class LRUCache {
         return result;
     }
 
-    
+
     public void put(int key, int value) {
         if (map.size() + 1 > capacity) {
             map.remove(flashList.get(0));
