@@ -62,6 +62,7 @@ public class Solution {
         return Math.max(left, right) + 1;
     }
 
+    
     // 用栈实现深度优先
     // 思想 将当前节点出栈，子节点入栈
     public int maxDepth2(TreeNode root) {
