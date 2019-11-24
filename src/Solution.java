@@ -2,11 +2,138 @@ import apple.laf.JRSUIUtils;
 import javafx.util.Pair;
 
 import java.math.BigDecimal;
+import java.time.temporal.ChronoField;
 import java.util.*;
 
 /**
  **/
 public class Solution {
+
+    // 有效的数独
+    // url:https://leetcode-cn.com/problems/valid-sudoku/
+    // 暴力解法，遍历三次
+    public boolean isValidSudoku(char[][] board) {
+        // 遍历行
+        for (int i = 0; i < board.length; i++) {
+            HashSet<Character> rowSet = new HashSet<>();
+            // 遍历行内每个
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == '.') {
+                    continue;
+                }
+                if (rowSet.contains(board[i][j])) {
+                    System.out.println("row");
+                    return false;
+                } else {
+                    rowSet.add(board[i][j]);
+                }
+            }
+        }
+
+        // 遍历列
+        for (int i = 0; i < board.length; i++) {
+            HashSet<Character> colSet = new HashSet<>();
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[j][i] == '.') {
+                    continue;
+                }
+                if (colSet.contains(board[j][i])) {
+                    System.out.println("col");
+                    return false;
+                } else {
+                    colSet.add(board[j][i]);
+                }
+            }
+        }
+
+        // 遍历九个九宫格
+        int rowStart = 0;
+        int colStart = 0;
+        for (int i = 1; i <= board.length; i++) {
+            HashSet<Character> set = new HashSet<>();
+            // 遍历九宫格
+            for (int j = rowStart; j < rowStart + 3; j++) {
+                for (int k = colStart; k < colStart + 3; k++) {
+                    if (board[j][k] == '.') {
+                        continue;
+                    }
+                    if (set.contains(board[j][k])) {
+                        return false;
+                    } else {
+                        set.add(board[j][k]);
+                    }
+                }
+            }
+            System.out.println(rowStart + "," + colStart);
+            rowStart = i % 9 == 0? rowStart + 3: rowStart;
+            colStart = colStart == 6? 0: colStart + 3;
+        }
+        
+        return true;
+    }
+
+    // 优雅的解法，遍历一次
+    public boolean isValidSudoku2(char[][] board) {
+        HashMap<Character, Boolean>[] rows = new HashMap[9];
+        HashMap<Character, Boolean>[] columns = new HashMap[9];
+        HashMap<Character, Boolean>[] boxes = new HashMap[9];
+
+        for (int i = 0; i < 9; i++) {
+            rows[i] = new HashMap<>();
+            columns[i] = new HashMap<>();
+            boxes[i] = new HashMap<>();
+        }
+
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                int boxIndex = (i / 3) * 3 + j / 3;
+                char c = board[i][j];
+                if (c == '.') {
+                    continue;
+                }
+
+                if (rows[i].getOrDefault(c, false) || columns[j].getOrDefault(c, false) || boxes[boxIndex].getOrDefault(c, false)) {
+                    return false;
+                }
+
+                rows[i].put(c, true);
+                columns[j].put(c, true);
+                boxes[boxIndex].put(c, true);
+            }
+        }
+
+        return true;
+    }
+
+    // 整数转罗马数字
+    // url:https://leetcode-cn.com/problems/integer-to-roman/
+//字符          数值
+//I             1
+//V             5
+//X             10
+//L             50
+//C             100
+//D             500
+//M             1000
+    public String intToRoman(int num) {
+        // 用数组定义字典
+        int[] values={1000,900,500,400,100,90,50,40,10,9,5,4,1};
+        String[] strs={"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
+
+        //定义一个字符串
+        StringBuilder res = new StringBuilder();
+
+        for(int i = 0; i <values.length; i ++){
+            int curr = num / values[i];
+            if(curr == 0)continue;
+            for(int j = curr; j > 0; j--)
+                res.append(strs[i]);
+            num -= (curr * values[i]);
+            if(num == 0)break;
+        }
+        return res.toString();
+    }
 
     /**
      * 是否是2的幂次方
