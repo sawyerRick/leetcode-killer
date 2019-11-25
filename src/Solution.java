@@ -1,13 +1,208 @@
-import apple.laf.JRSUIUtils;
 import javafx.util.Pair;
 
 import java.math.BigDecimal;
-import java.time.temporal.ChronoField;
 import java.util.*;
 
 /**
  **/
 public class Solution {
+    // 两数相除
+    // url: https://leetcode-cn.com/problems/divide-two-integers/
+    // 将两数相除，要求不使用乘法、除法和 mod 运算符。
+
+    public int myDivide(int dividend, int divisor) {
+        // 判断符号
+        boolean sign = (dividend > 0) ^ (divisor > 0);
+        // 都变成负数运算
+        dividend = -Math.abs(dividend);
+        divisor = -Math.abs(divisor);
+        if (dividend == 0 || divisor < dividend) {
+            return 0;
+        }
+        int result = -1;
+
+        while (dividend <= divisor) {
+            if (dividend <= (divisor << 1)) {
+                if(divisor <= (Integer.MIN_VALUE >> 1))break;
+                result -= 1;
+                dividend = dividend - divisor;
+            } else {
+                break;
+            }
+        }
+
+        if(!sign) {
+            if(result <= Integer.MIN_VALUE) return Integer.MAX_VALUE;
+            result = -result;
+        }
+
+        return result;
+    }
+
+
+    public int divide(int dividend, int divisor) {
+        // 异或运算 获得符号
+        boolean sign = (dividend > 0) ^ (divisor > 0);
+        int result = 0;
+        // 都换成负数运算
+        if(dividend>0) {
+            dividend = -dividend;
+        }
+        if(divisor>0) {
+            divisor = -divisor;
+        }
+        while(dividend <= divisor) {
+            // 不断逼近被除数
+            int temp_result = -1;
+            int temp_divisor = divisor;
+            while(dividend <= (temp_divisor << 1)) {
+                // 判断溢出
+                if(temp_divisor <= (Integer.MIN_VALUE >> 1))break;
+                temp_result = temp_result << 1;
+                temp_divisor = temp_divisor << 1;
+            }
+            dividend = dividend - temp_divisor;
+            result += temp_result;
+        }
+        if(!sign) {
+            if(result <= Integer.MIN_VALUE) return Integer.MAX_VALUE;
+            result = - result;
+        }
+        return result;
+    }
+
+
+    //  组合总和
+    // url:https://leetcode-cn.com/problems/combination-sum/
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+
+
+        return null;
+    }
+
+    // 报数
+    // url:https://leetcode-cn.com/problems/count-and-say/
+    // 外观数列
+    public String countAndSay(int n) {
+        StringBuilder[] list = new StringBuilder[n];
+        for (int i = 0; i < list.length; i++) {
+            list[i] = new StringBuilder();
+        }
+        list[0].append(1);
+
+        for (int i = 0; i < n - 1; i++) {
+            String curr = list[i].toString();
+
+            int j;
+            int count = 1;
+            // 遍历前一个串，获取下一个串
+            for (j = 0; j < curr.length(); j++) {
+                // 取重复字段并计数
+                int next = j + 1;
+                char nextChar = '.';
+                // 如果有下一个
+                if (next < curr.length()) {
+                    nextChar = list[i].charAt(j + 1);
+                } else {
+                    list[i + 1].append(count).append(list[i].charAt(j));
+                    count = 1;
+                    continue;
+                }
+
+                if (list[i].charAt(j) == nextChar) {
+                    count++;
+                } else {
+                    list[i + 1].append(count).append(list[i].charAt(j));
+                    count = 1;
+                }
+            }
+        }
+
+        return list[n - 1].toString();
+    }
+
+    // 解数独：
+    // url:https://leetcode-cn.com/problems/sudoku-solver/solution/
+    // 回溯+约束编程
+    class SudoKuSolution {
+        int n = 3;
+        int N = n * n;
+
+        boolean sudokuSolved = false;
+
+        int[][] rows = new int[N][N + 1]; // N + 1为了方便直接表示下的数字
+        int[][] columns = new int[N][N + 1];
+        int[][] boxes = new int[N][N + 1];
+
+        char[][] board;
+
+        private void place(int d, int r, int c) {
+            int idx = (r / n) * n + c / n;
+            rows[r][d]++;
+            columns[c][d]++;
+            boxes[idx][d]++;
+            board[r][c] = (char) (d + '0');
+        }
+
+        private void remove(int d, int r, int c) {
+            int idx = (r / n) * n + c / n;
+            rows[r][d]--;
+            columns[c][d]--;
+            boxes[idx][d]--;
+            board[r][c] = '.';
+        }
+
+        private boolean couldPlace(int d, int r, int c) {
+            int idx = (r / n) * n + c / n;
+
+            return rows[r][d] + columns[c][d] + boxes[idx][d] == 0;
+        }
+
+        private void placeNext(int r, int c) {
+            if (r == N - 1 && c == N - 1) {
+                sudokuSolved = true;
+            } else {
+                if (c == N - 1) {
+                    backTrace(r + 1, 0);
+                } else {
+                    backTrace(r, c + 1);
+                }
+            }
+        }
+
+        private void backTrace(int r, int c) {
+            if (board[r][c] == '.') {
+                // 尝试1-9
+                for (int i = 1; i < 10; i++) {
+                    if (couldPlace(i, r, c)) {
+                        place(i, r, c);
+                        placeNext(r, c);
+                        if (!sudokuSolved) {
+                            remove(i, r, c);
+                        }
+                    }
+                }
+            } else {
+                placeNext(r, c);
+            }
+        }
+
+        public void solveSudoku(char[][] board) {
+            this.board = board;
+
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (board[i][j] != '.') {
+                        int d = Character.getNumericValue(board[i][j]);
+                        place(d, i, j);
+                    }
+                }
+            }
+
+            backTrace(0, 0);
+        }
+    }
+
 
     // 有效的数独
     // url:https://leetcode-cn.com/problems/valid-sudoku/
