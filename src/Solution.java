@@ -3,9 +3,99 @@ import javafx.util.Pair;
 import java.math.BigDecimal;
 import java.util.*;
 
-/**
- **/
 public class Solution {
+
+    public void nQueen() {
+        SolutionNQueens queens = new SolutionNQueens();
+        queens.solveNQueens(12);
+    }
+
+    // N皇后
+    // url:https://leetcode-cn.com/problems/n-queens/
+    // 同数独，约束编程+回溯
+    class SolutionNQueens {
+        private int n;
+        private int[] columns;
+        // 细节：对角线上的坐标相加或相减是一个常数
+        private int[] hills;//正对角线 相减 ==》 常数
+        private int[] dales;//负对角线 相加 ==》 常数
+        private int[] queens;
+        List<List<String>> out = new ArrayList<>();
+
+        public List<List<String>> solveNQueens(int n) {
+            this.n = n;
+            this.columns = new int[n];
+            this.dales = new int[2 * n - 1]; // c + r
+            this.hills = new int[2 * n - 1]; // c - r + n - 1
+            this.queens = new int[n];
+            backTrace(0);
+
+            return out;
+        }
+
+        private void pack() {
+            List<String> l = new ArrayList<>();
+            for (int i = 0; i < queens.length; i++) {
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < queens.length; j++) {
+                    if (queens[i] == j) {
+                        sb.append('Q');
+                    } else {
+                        sb.append('.');
+                    }
+                }
+                l.add(sb.toString());
+            }
+            out.add(l);
+
+//            for (String s : l) {
+//                System.out.println(s);
+//            }
+//            System.out.println();
+        }
+
+        // 回溯
+        private void backTrace(int r) {
+            if (r >= n) {
+                return;
+            }
+            // 按列逐个尝试, 全都不行就回溯
+            for (int i = 0; i < n; i++) {
+                if (couldPlace(r, i)) {
+                    place(r, i);
+                    // 下一行
+                    backTrace(r + 1);
+                    if (r + 1 == n) {
+                        pack();
+                    }
+                    remove(r, i);
+                }
+            }
+        }
+
+        private void remove(int r, int c) {
+            columns[c] = 0;
+//            columns[c] = 0;
+            dales[c + r] = 0;
+            hills[c - r + n - 1] = 0;
+            queens[r] = -1;
+        }
+
+        private void place(int r, int c) {
+            columns[c] = 1;
+//            columns[c] = 1;
+            dales[c + r] = 1;
+            hills[c - r + n - 1] = 1;
+            queens[r] = c;
+        }
+
+        // 约束编程
+        private boolean couldPlace(int r, int c) {
+            // 不会出现行重复
+            return columns[c] + dales[c + r] + hills[c - r + n - 1] == 0;
+        }
+    }
+
     // 两数相除
     // url: https://leetcode-cn.com/problems/divide-two-integers/
     // 将两数相除，要求不使用乘法、除法和 mod 运算符。
@@ -16,19 +106,21 @@ public class Solution {
         // 都变成负数运算
         dividend = -Math.abs(dividend);
         divisor = -Math.abs(divisor);
-        if (dividend == 0 || divisor < dividend) {
-            return 0;
-        }
-        int result = -1;
+        int result = 0;
 
         while (dividend <= divisor) {
-            if (dividend <= (divisor << 1)) {
-                if(divisor <= (Integer.MIN_VALUE >> 1))break;
-                result -= 1;
-                dividend = dividend - divisor;
-            } else {
-                break;
+            int tmp_rst = -1;
+            int tmp_divisor = divisor;
+            while (dividend <= (tmp_divisor << 1)) {
+                // 溢出判断
+                if (tmp_divisor <= (Integer.MIN_VALUE >> 1)) {
+                    break;
+                }
+                tmp_rst = tmp_rst << 1;
+                tmp_divisor = tmp_divisor << 1;
             }
+            result += tmp_rst;
+            dividend -= tmp_divisor;
         }
 
         if(!sign) {

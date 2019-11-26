@@ -7,7 +7,6 @@
 public class Main {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int result = solution.divide(-2147483648, 1);
-        System.out.println(result);
+        solution.nQueen();
     }
 }
