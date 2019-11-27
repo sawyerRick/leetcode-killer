@@ -5,6 +5,41 @@ import java.util.*;
 
 public class Solution {
 
+    // 两两交换相邻节点
+    // url:https://leetcode-cn.com/problems/swap-nodes-in-pairs/
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode curr = head;
+        ListNode newHead = head.next;
+        ListNode pre;
+        ListNode prepre = null;
+        while (curr != null) {
+            pre = curr;
+            curr = curr.next;
+
+            // 交换
+            if (curr != null) {
+                ListNode tmp = curr.next;
+                curr.next = pre;
+                pre.next = tmp;
+                if (prepre != null) {
+                    prepre.next = curr;
+                }
+                // 调整到当前位置
+                curr = pre;
+                prepre = curr;
+                if (curr.next != null) {
+                    curr = curr.next;
+                }
+            }
+        }
+
+        return newHead;
+    }
+
     public void nQueen() {
         SolutionNQueens queens = new SolutionNQueens();
         queens.solveNQueens(12);
@@ -100,7 +135,7 @@ public class Solution {
     // url: https://leetcode-cn.com/problems/divide-two-integers/
     // 将两数相除，要求不使用乘法、除法和 mod 运算符。
 
-    
+
     public int myDivide(int dividend, int divisor) {
         // 判断符号
         boolean sign = (dividend > 0) ^ (divisor > 0);
