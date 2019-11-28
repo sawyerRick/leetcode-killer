@@ -5,6 +5,50 @@ import java.util.*;
 
 public class Solution {
 
+    // 最长有效括号
+    // url:https://leetcode-cn.com/problems/longest-valid-parentheses/
+    public int longestValidParentheses(String s) {
+        if (s == null || s.length() <= 1) {
+            return 0;
+        }
+
+        int left = 0;
+        int right = 0;
+        int max = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                left++;
+            } else {
+                right++;
+            }
+
+            if (left == right) {
+                max = Math.max(max, 2 * right);
+            } else if (right >= left) {
+                left = right = 0;
+            }
+        }
+        left = 0;
+        right = 0;
+        for (int i = s.length() - 1; i >= 0 ; i--) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+
+            if (left == right) {
+                max = Math.max(max, 2 * left);
+            } else if (right < left) {
+                left = right = 0;
+            }
+        }
+
+        System.out.println(max);
+
+        return max;
+    }
+
     // 两两交换相邻节点
     // url:https://leetcode-cn.com/problems/swap-nodes-in-pairs/
     public ListNode swapPairs(ListNode head) {
