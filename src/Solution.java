@@ -5,6 +5,42 @@ import java.util.*;
 
 public class Solution {
 
+
+    // https://leetcode-cn.com/problems/symmetric-tree/
+    // 判断二叉树是否对称
+    // 层次遍历
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return false;
+        }
+
+        LinkedList<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            List<Integer> level = new ArrayList<>();
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode curr = queue.poll();
+                level.add(curr.val);
+                if (curr.left != null) {
+                    queue.offer(curr.left);
+                }
+
+                if (curr.right != null) {
+                    queue.offer(curr.right);
+                }
+            }
+            for (int i = 0; i < level.size() / 2; i++) {
+                if (!level.get(i).equals(level.get(level.size() - i - 1))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     // 最长有效括号
     // url:https://leetcode-cn.com/problems/longest-valid-parentheses/
     public int longestValidParentheses(String s) {
