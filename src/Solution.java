@@ -5,6 +5,34 @@ import java.util.*;
 
 public class Solution {
 
+    // 子集
+    // url: https://leetcode-cn.com/problems/subsets/
+    // 回溯 + 约束编程
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(0, nums, res, new ArrayList<Integer>());
+        return res;
+
+    }
+
+    private void backtrack(int i, int[] nums, List<List<Integer>> res, ArrayList<Integer> tmp) {
+        res.add(new ArrayList<>(tmp));
+        for (int j = i; j < nums.length; j++) {
+            tmp.add(nums[j]);
+            backtrack(j + 1, nums, res, tmp);
+            tmp.remove(tmp.size() - 1);
+        }
+    }
+
+    // 最接近的三数之和
+    // url: https://leetcode-cn.com/problems/3sum-closest/
+    public int threeSumClosest(int[] nums, int target) {
+
+
+
+        return 1;
+    }
+
 
     // https://leetcode-cn.com/problems/symmetric-tree/
     // 判断二叉树是否对称
