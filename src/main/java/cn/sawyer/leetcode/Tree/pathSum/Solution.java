@@ -4,34 +4,33 @@ import cn.sawyer.leetcode.Tree.TreeNode;
 
 /**
  * @program: LeetCode
- * @description: 路径总和，https://leetcode-cn.com/problems/path-sum-iii/
+ * @description: 路径总和1，https://leetcode-cn.com/problems/path-sum/
  * @author: sawyer
- * @create: 2020-01-28 15:01
+ * @create: 2020-02-10 15:59
  **/
 public class Solution {
-    int sum;
-    int count;
 
-    // dfs
-    void dfs(TreeNode node, int curr) {
-        if (node == null) {
+    boolean find = false;
+    int sum;
+
+    void dfs(TreeNode root, int curr) {
+        if (root == null || find) {
             return;
         }
 
-        if (curr + node.val == sum) {
-            count++;
+        curr += root.val;
+        if (curr == sum && root.left == null && root.right == null) {
+            find = true;
+            return;
         }
-        dfs(node.left, curr); // 不选当前，走左
-        dfs(node.left, curr + node.val); // 选当前，走左
-        dfs(node.right, curr);
-        dfs(node.right, curr + node.val);
+        dfs(root.left, curr);
+        dfs(root.right, curr);
     }
 
-    public int pathSum(TreeNode root, int sum) {
+    public boolean hasPathSum(TreeNode root, int sum) {
         this.sum = sum;
-
         dfs(root, 0);
 
-        return count;
+        return find;
     }
 }

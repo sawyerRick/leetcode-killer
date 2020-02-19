@@ -13,6 +13,7 @@ import java.util.*;
 
 // 思路：构造一棵镜像的🌲和自己比较
 public class Solution {
+
     public boolean isSymmetric(TreeNode root) {
         Queue<TreeNode> q = new LinkedList<>();
         q.add(root);

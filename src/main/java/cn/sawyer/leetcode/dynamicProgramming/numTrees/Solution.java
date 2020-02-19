@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * @program: LeetCode
- * @description: 不同的二叉搜索树数量，https://leetcode-cn.com/problems/unique-binary-search-trees/
+ * @description: 不同的二叉搜索树1，https://leetcode-cn.com/problems/unique-binary-search-trees/
  * @author: sawyer
  * @create: 2020-01-16 21:09
  **/
@@ -25,8 +25,8 @@ public class Solution {
         if (n == 1 || n == 0) {
             return 1;
         }
-        int left = 0;
-        int right = 0;
+        int left;
+        int right;
         int subProb = 0;
 
         for (int i = 1; i <= n; i++) {
@@ -75,13 +75,6 @@ public class Solution {
 
         return dp[n];
     }
-
-
-
-
-
-
-
 
 
     public int numTrees(int n) {

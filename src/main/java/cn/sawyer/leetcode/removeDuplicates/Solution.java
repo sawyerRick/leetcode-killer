@@ -2,10 +2,12 @@ package cn.sawyer.leetcode.removeDuplicates;
 
 /**
  * @program: LeetCode
- * @description:
+ * @description: 删除排序数组重复项，https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/
  * @author: sawyer
  * @create: 2019-12-17 16:43
  **/
+
+// 双指针
 class Solution {
     public int removeDuplicates(int[] nums) {
         if (nums.length == 0) return 0;
@@ -16,16 +18,7 @@ class Solution {
                 nums[i] = nums[j];
             }
         }
-        return i + 1;
-    }
 
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        int[] nums = new int[]{1, 1, 1, 1, 2, 2, 2};
-        int i = solution.removeDuplicates(nums);
-        System.out.println(i);
-//        for (int j = 0; j < i; j++) {
-//            System.out.println(nums[j]);
-//        }
+        return i + 1;
     }
 }

@@ -7,7 +7,9 @@ package cn.sawyer.leetcode.dynamicProgramming.maximalRectangle;
  * @create: 2020-01-17 17:45
  **/
 public class Solution {
+
     public int maximalRectangle(char[][] matrix) {
+
 
 
         return 0;

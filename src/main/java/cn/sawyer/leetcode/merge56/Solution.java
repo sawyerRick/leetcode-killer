@@ -9,62 +9,23 @@ import java.util.*;
  * @create: 2019-12-30 14:23
  **/
 public class Solution {
-    class Interval implements Comparable<Interval>{
-        int start;
-        int end;
-
-        public Interval(int start, int end) {
-            this.start = start;
-            this.end = end;
-        }
-
-        @Override
-        public int compareTo(Interval o) {
-            return Integer.compare(start, o.start);
-        }
-    }
-
     public int[][] merge(int[][] intervals) {
-        List<Interval> list = new ArrayList<>();
-        LinkedList<Interval> merged = new LinkedList<>();
-        for (int i = 0; i < intervals.length; i++) {
-            list.add(new Interval(intervals[i][0], intervals[i][1]));
+        if (intervals.length == 0) {
+            return new int[0][];
         }
 
-        Collections.sort(list);
+        // 按start排序
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
 
-        for (Interval e : list) {
-            if (merged.isEmpty() || merged.getLast().end < e.start) {
-                merged.add(e);
+        LinkedList<int[]> ans = new LinkedList<>();
+        for (int[] i : intervals) {
+            if (ans.isEmpty() || ans.getLast()[1] < i[0] ) {
+                ans.add(i);
             } else {
-                merged.getLast().end = Math.max(merged.getLast().end, e.end);
+                ans.getLast()[1] = Math.max(i[1], ans.getLast()[1]);
             }
         }
 
-        int[][] ans = new int[merged.size()][2];
-
-        for (int i = 0; i < merged.size(); i++) {
-            ans[i][0] = merged.get(i).start;
-            ans[i][1] = merged.get(i).end;
-        }
-
-
-
-        return ans;
-    }
-
-    public static void main(String[] args) {
-
-        Solution s = new Solution();
-        int[][] nums = new int[][]{{1, 3}, {4, 2}};
-        s.merge(nums);
-        for (int[] num : nums) {
-            for (int i : num) {
-                System.out.print(i + " ");
-            }
-            System.out.println();
-        }
-
-
+        return ans.toArray(new int[ans.size()][2]);
     }
 }

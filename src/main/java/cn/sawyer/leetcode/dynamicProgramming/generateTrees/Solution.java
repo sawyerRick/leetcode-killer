@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @program: LeetCode
- * @description: 不同的二叉搜索树二，https://leetcode-cn.com/problems/unique-binary-search-trees-ii/
+ * @description: 不同的二叉搜索树2，https://leetcode-cn.com/problems/unique-binary-search-trees-ii/
  * @author: sawyer
  * @create: 2020-01-25 15:25
  **/

@@ -12,33 +12,34 @@ public class Solution {
     String word;
     int rowLen;
     int colLen;
-    boolean find;
     int[][] visited;
     private int[][] direction = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
 
-    void backtrack(int row, int col, String curr) {
-        curr += board[row][col];
-
-        if (curr.equals(word)) {
-            find = true;
-            return;
-        } else if (curr.length() >= word.length()) {
-            // 快速失败
-            return;
+    boolean backtrack(int row, int col, int start) {
+        if (start == word.length() - 1) {
+            return word.charAt(start) == board[row][col];
         }
-        String tmp = curr;
+
+        // 四个方向尝试
         visited[row][col] = 1;
-        for (int k = 0; k < 4; k++) {
-            int x = row + direction[k][0];
-            int y = col + direction[k][1];
-            if (x >= rowLen || y >= colLen || x < 0 || y < 0 || visited[x][y] == 1) {
-            } else {
-                backtrack(x, y, curr);
+        if (word.charAt(start) == board[row][col]) {
+            for (int k = 0; k < 4; k++) {
+                int x = row + direction[k][0];
+                int y = col + direction[k][1];
+                if (inArea(x, y) && visited[x][y] != 1) {
+                    if (backtrack(x, y, start + 1)) {
+                        return true;
+                    }
+                }
             }
         }
         visited[row][col] = 0;
-        curr = tmp;
 
+        return false;
+    }
+
+    boolean inArea(int x, int y) {
+        return x < rowLen && y < colLen && x >= 0 && y >= 0;
     }
 
     public boolean exist(char[][] board, String word) {
@@ -52,18 +53,13 @@ public class Solution {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (word.charAt(0) == board[i][j]) {
-                    backtrack(i, j, "");
+                    if (backtrack(i, j, 0)) {
+                        return true;
+                    }
                 }
             }
         }
 
-
-        return find;
-    }
-
-    public static void main(String[] args) {
-        Solution s = new Solution();
-        boolean a = s.exist(new char[][]{{'a'}}, "a");
-        System.out.println(a);
+        return false;
     }
 }

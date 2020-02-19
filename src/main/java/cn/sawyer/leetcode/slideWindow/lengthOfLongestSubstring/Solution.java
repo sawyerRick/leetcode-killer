@@ -25,8 +25,8 @@ public class Solution {
         while (r < s.length()) {
             if (!window.contains(chars[r])) {
                 window.add(chars[r]);
+                len = Math.max(len, r - l + 1);
                 r++;
-                len = Math.max(len, r - l);
             } else {
                 window.remove(chars[l]);
                 l++;
