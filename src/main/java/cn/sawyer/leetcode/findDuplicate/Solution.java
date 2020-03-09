@@ -25,7 +25,7 @@ public class Solution {
         return -1;
     }
 
-    // 哈希元组
+    // set
     public int findDuplicate2(int[] nums) {
         Set<Integer> set = new HashSet<>();
 

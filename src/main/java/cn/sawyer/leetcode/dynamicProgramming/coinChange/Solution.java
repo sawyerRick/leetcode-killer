@@ -1,8 +1,6 @@
 package cn.sawyer.leetcode.dynamicProgramming.coinChange;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: LeetCode
@@ -14,6 +12,7 @@ public class Solution {
 
     // 暴力递归，超时
     public int coinChange2(int[] coins, int amount) {
+        List list = new ArrayList();
         if (amount == 0) {
             return 0;
         }

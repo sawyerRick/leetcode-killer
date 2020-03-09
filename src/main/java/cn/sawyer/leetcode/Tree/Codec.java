@@ -9,7 +9,7 @@ import java.util.*;
  * @create: 2020-01-10 15:08
  **/
 
-// 序列化格式：bfs，dfs 显然，我们需要有顺序的序列，所以选择dfs;
+// dfs
 public class Codec {
 
     public void dfs(TreeNode node, StringBuilder sb) {
@@ -22,7 +22,6 @@ public class Codec {
         }
     }
 
-    // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
 
         StringBuilder sb = new StringBuilder();
@@ -32,7 +31,6 @@ public class Codec {
         return sb.toString();
     }
 
-    // 反dfs
     public TreeNode rdfs(Queue<String> list) {
         String s = list.remove();
         if (s.equals("null")) {
@@ -47,7 +45,6 @@ public class Codec {
         return node;
     }
 
-    // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
         String[] chars = data.split(",");
         Queue<String> list = new LinkedList<>(Arrays.asList(chars));

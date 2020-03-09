@@ -21,7 +21,7 @@ public class Solution {
     public int findCircleNum3(int[][] M) {
         int[] visited = new int[M.length];
         int count = 0;
-        Queue< Integer > queue = new LinkedList<>();
+        Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < M.length; i++) {
             if (visited[i] == 0) {
                 queue.add(i);

@@ -57,7 +57,7 @@ public class Solution {
         return ans.size() == numCourses;
     }
 
-    // 自己的重写
+    // 重写
     public boolean canFinish2(int numCourses, int[][] prerequisites) {
 
         // 入度

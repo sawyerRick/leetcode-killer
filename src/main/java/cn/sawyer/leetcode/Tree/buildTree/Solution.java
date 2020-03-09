@@ -7,43 +7,50 @@ import java.util.Map;
 
 /**
  * @program: LeetCode
- * @description: 从前序遍历和中序遍历构造二叉树，https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+ * @description: 重建二叉树，https://leetcode-cn.com/problems/zhong-jian-er-cha-shu-lcof/
  * @author: sawyer
- * @create: 2020-01-19 15:33
+ * @create: 2020-02-28 14:30
  **/
 public class Solution {
 
-    private int[] preorder;
-    private Map<Integer, Integer> hash;
+    // 前序：找根节点
+    // 中序：找左右子树，递归
+
+    // 储存 中序：k值-v下标
+    Map<Integer, Integer> map = new HashMap<>();
+
+    int[] preorder;
+    int[] inorder;
+    int preIdx = 0;
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        int preLen = preorder.length;
-        int inLen = inorder.length;
-        this.preorder = preorder;
-        this.hash = new HashMap<>();
-        // put前序的value,对应中序的index
-        for (int i = 0; i < inLen; i++) {
-            hash.put(inorder[i], i);
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
         }
+        this.preorder = preorder;
+        this.inorder = inorder;
 
-        return buildTree(0, preLen - 1, 0, inLen - 1);
+        return dfs(0, preorder.length);
     }
 
-
-    private TreeNode buildTree(int preLeft, int preRight, int inLeft, int inRight) {
-        if (preLeft > preRight || inLeft > inRight) {
+    TreeNode dfs(int lIdx, int rIdx) {
+        if (lIdx == rIdx) {
             return null;
         }
-        int preValue = preorder[preLeft]; // 前序value
-        TreeNode root = new TreeNode(preValue);
-        int inIndex = hash.get(preValue); // 前序value在中序的index
-        // 左：
-        // 前序：左边界+1，右边界=
-        root.left = buildTree(preLeft + 1, inIndex - inLeft + preLeft,
-                inLeft, inIndex - 1);
-        root.right = buildTree(inIndex - inLeft + preLeft + 1, preRight,
-                inIndex + 1, inRight);
+
+        int rootVal = preorder[preIdx];
+        TreeNode root = new TreeNode(rootVal);
+        // 递归
+        int mid = map.get(rootVal);
+        preIdx++;
+        root.left = dfs(lIdx, mid);
+        root.right = dfs(mid + 1, rIdx);
+
         return root;
     }
-}
 
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        solution.buildTree(new int[]{3, 9, 20, 15, 7}, new int[]{9, 3, 15, 20, 7});
+    }
+}
