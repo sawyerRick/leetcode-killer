@@ -69,7 +69,7 @@ public class Solution {
         int dp_i_2 = 0; // i - 2
 
 
-        for (int i = start; i < end; i++) {
+        for (int i = start; i <= end; i++) {
             dp_i = Math.max(dp_i_2 + nums[i], dp_i_1);
             dp_i_2 = dp_i_1;
             dp_i_1 = dp_i;

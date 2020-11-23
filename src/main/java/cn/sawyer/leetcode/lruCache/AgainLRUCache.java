@@ -82,7 +82,7 @@ public class AgainLRUCache {
             if (size > capacity) {
                 Node last = tail.prev;
                 map.remove(last.key);
-                remove(tail.prev);
+                remove(last);
                 size--;
             }
         }
